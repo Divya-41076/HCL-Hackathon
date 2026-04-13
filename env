@@ -1,0 +1,2 @@
+DATABASE_URL=sqlite:///banking.db
+SECRET_KEY=hackathon-secret-key-2024
