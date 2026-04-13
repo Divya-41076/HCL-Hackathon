@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth
-from app.routers import auth, accounts
+from app.db.session import engine
+from app.db.base import Base
 from app.routers import auth, accounts, transactions, service_requests, insights
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Online Banking API")
 

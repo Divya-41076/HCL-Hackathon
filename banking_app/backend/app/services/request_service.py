@@ -1,32 +1,29 @@
-from fastapi import HTTPException
+from sqlalchemy.orm import Session
+from app.models.service_request import ServiceRequest
 
-FAKE_REQUESTS = []
-REQUEST_COUNTER = [1]
-
-def create_request(customer_id: int, type: str, description: str = None):
-    request = {
-        "request_id": REQUEST_COUNTER[0],
-        "customer_id": customer_id,
-        "type": type,
-        "description": description,
-        "status": "OPEN"
-    }
-    FAKE_REQUESTS.append(request)
-    REQUEST_COUNTER[0] += 1
+def create_request(db: Session, customer_id: int, type: str, description: str = None):
+    request = ServiceRequest(
+        customer_id=customer_id,
+        type=type,
+        description=description,
+        status="OPEN"
+    )
+    db.add(request)
+    db.commit()
+    db.refresh(request)
     return request
 
-def get_request(request_id: int):
-    for r in FAKE_REQUESTS:
-        if r["request_id"] == request_id:
-            return r
-    return None
+def get_request(db: Session, request_id: int):
+    return db.query(ServiceRequest).filter(ServiceRequest.request_id == request_id).first()
 
-def update_status(request_id: int, status: str):
-    request = get_request(request_id)
+def update_status(db: Session, request_id: int, status: str):
+    request = get_request(db, request_id)
     if not request:
         return None
-    request["status"] = status
+    request.status = status
+    db.commit()
+    db.refresh(request)
     return request
 
-def get_requests_by_customer(customer_id: int):
-    return [r for r in FAKE_REQUESTS if r["customer_id"] == customer_id]
+def get_requests_by_customer(db: Session, customer_id: int):
+    return db.query(ServiceRequest).filter(ServiceRequest.customer_id == customer_id).all()
