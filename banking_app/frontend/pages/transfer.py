@@ -25,7 +25,7 @@ def render():
  
     with st.form("transfer_form"):
         from_label = st.selectbox("From account", list(acc_options.keys()))
-        to_account_id = st.number_input("To account ID", min_value=1, step=1, help="Enter the recipient's account ID")
+        to_account_id = st.text_input("To account ID", help="Enter the recipient's account ID")
         amount = st.number_input("Amount (₹)", min_value=0.01, step=0.01, format="%.2f")
         submitted = st.form_submit_button("Transfer", use_container_width=True)
  
