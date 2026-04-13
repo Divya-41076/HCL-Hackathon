@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from app.services.auth_service import register_customer, login_customer
+from app.services.auth_service import register_customer, login_customer, get_customer
+from app.core.security import decode_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
 class RegisterRequest(BaseModel):
     name: str
     email: str
@@ -37,7 +37,6 @@ def login(req: LoginRequest):
 
 @router.get("/me")
 def get_me(current_user_id: int = Depends(decode_token)):
-    from app.services.auth_service import get_customer
     customer = get_customer(current_user_id)
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found")
