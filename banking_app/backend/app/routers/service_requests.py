@@ -34,3 +34,7 @@ def update(request_id: int, body: StatusUpdate, current_user_id: int = Depends(d
 @router.get("/customer/{customer_id}")
 def list_by_customer(customer_id: int, current_user_id: int = Depends(decode_token)):
     return get_requests_by_customer(customer_id)
+
+@router.get("/me")
+def get_my_requests(current_user_id: int = Depends(decode_token)):
+    return get_requests_by_customer(current_user_id)
