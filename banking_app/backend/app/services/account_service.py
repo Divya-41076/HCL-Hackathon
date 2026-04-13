@@ -22,5 +22,11 @@ def get_account(account_id: int):
                 return acc
     return None
 
+def add_balance(account_id: int, amount: float):
+    account = get_account(account_id)
+    if account:
+        account["balance"] += amount
+    return account
+
 def list_accounts(customer_id: int):
     return FAKE_ACCOUNTS.get(customer_id, [])

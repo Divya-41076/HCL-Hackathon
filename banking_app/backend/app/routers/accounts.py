@@ -24,3 +24,8 @@ def get(account_id: int, current_user_id: int = Depends(decode_token)):
 @router.get("/customer/{customer_id}")
 def list_by_customer(customer_id: int, current_user_id: int = Depends(decode_token)):
     return list_accounts(customer_id)
+
+@router.post("/add-balance")
+def add_balance_route(account_id: int, amount: float):
+    from app.services.account_service import add_balance
+    return add_balance(account_id, amount)
