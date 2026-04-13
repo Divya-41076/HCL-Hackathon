@@ -34,3 +34,15 @@ def login(req: LoginRequest):
     if not result:
         raise HTTPException(status_code=401, detail="Invalid email or password")
     return result
+
+@router.get("/me")
+def get_me(current_user_id: int = Depends(decode_token)):
+    from app.services.auth_service import get_customer
+    customer = get_customer(current_user_id)
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return {
+        "customer_id": customer["customer_id"],
+        "name": customer["name"],
+        "email": customer["email"]
+    }
