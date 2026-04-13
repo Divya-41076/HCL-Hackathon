@@ -171,20 +171,6 @@ Each layer has one responsibility:
 
 ---
 
-## Database Schema
-
-![Database ERD](docs/erd.png)
-
-| Table | Description |
-|-------|-------------|
-| customers | User details and credentials |
-| accounts | Bank accounts with balances |
-| transactions | Fund transfer records |
-| service_requests | Customer support requests |
-| bank_staff | Admin and support staff |
-
----
-
 ## API Endpoints
 
 | Method | Route | Auth | Purpose |
