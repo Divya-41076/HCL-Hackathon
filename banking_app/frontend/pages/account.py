@@ -46,3 +46,18 @@ def render():
             st.session_state.selected_account_id = selected_id
             st.session_state.page = "history"
             st.rerun()
+
+    st.divider()
+    st.markdown("*Create a new account*")
+    with st.form("create_account_form"):
+        account_type = st.selectbox("Account type", ["SAVINGS", "CURRENT"])
+        create_submitted = st.form_submit_button("Create account", use_container_width=True)
+
+    if create_submitted:
+        from utils.api_client import create_account
+        result = create_account(customer_id, account_type)
+        if "account_id" in result:
+            st.success(f"✅ {account_type} account #{result['account_id']} created!")
+            st.rerun()
+        else:
+            st.error(result.get("detail", "Failed to create account."))

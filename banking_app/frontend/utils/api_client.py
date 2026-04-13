@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 
 API_BASE = "http://localhost:8000"
-MOCK_MODE = False  # Set to False when backend is live
+MOCK_MODE = True  # Set to False when backend is live
 
 
 def get_headers():
@@ -224,6 +224,19 @@ def get_insights(account_id: int) -> dict:
         }
     try:
         r = requests.post(f"{API_BASE}/insights/{account_id}", headers=get_headers())
+        return r.json()
+    except Exception as e:
+        return {"detail": str(e)}
+
+
+def create_account(customer_id: int, account_type: str) -> dict:
+    if MOCK_MODE:
+        return {"account_id": 5, "customer_id": customer_id, "account_type": account_type, "balance": 0.0, "status": "ACTIVE"}
+    try:
+        r = requests.post(f"{API_BASE}/accounts/", json={
+            "customer_id": customer_id,
+            "account_type": account_type
+        }, headers=get_headers())
         return r.json()
     except Exception as e:
         return {"detail": str(e)}
